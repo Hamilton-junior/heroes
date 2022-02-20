@@ -121,7 +121,7 @@ export default {
   border: 1px solid rgba(249, 249, 249, 0.1);
   border-radius: 4px;
   padding: 10px;
-  transition: all 0.2s;
+  transition: all ease 0.2s;
   position: relative;
 }
 .hero:hover {
