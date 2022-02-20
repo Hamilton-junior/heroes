@@ -1,40 +1,57 @@
 <template>
-  <section v-if="hero" class="hero-container">
-    <h1>Informações sobre o herói</h1>
-    <div class="hero">
-      <div class="hero-image">
-        <img
-          :src="`${hero.thumbnail.path}.${hero.thumbnail.extension}`"
-          :alt="hero.name"
-        />
+  <div>
+    <section v-if="hero" class="hero-container">
+      <h1>Informações sobre o herói</h1>
+      <div class="hero">
+        <div class="hero-image">
+          <img
+            :src="`${hero.thumbnail.path}.${hero.thumbnail.extension}`"
+            :alt="hero.name"
+          />
+        </div>
+        <div class="hero-details">
+          <h2 class="hero-name">{{ hero.name }}</h2>
+          <p class="hero-description">
+            {{
+              hero.description
+                ? hero.description
+                : "Esse herói não possui descrição atualmente."
+            }}
+          </p>
+          <p class="hero-modified">Modificado em:{{ hero.modified }}</p>
+          <ul class="hero-list">
+            <li>Esse personagem tem:{{ hero.comics.available }} quadrinhos.</li>
+            <li>Aparece em:{{ hero.stories.available }} histórias.</li>
+            <li>Aparece em:{{ hero.events.available }} eventos.</li>
+            <li>Aparece em:{{ hero.series.available }} séries.</li>
+          </ul>
+        </div>
       </div>
-      <div class="hero-details">
-        <h2 class="hero-name">{{ hero.name }}</h2>
-        <p class="hero-description">
-          {{
-            hero.description
-              ? hero.description
-              : "Esse herói não possui descrição atualmente."
-          }}
-        </p>
-        <p class="hero-modified">Modificado em:{{ hero.modified }}</p>
-        <ul class="hero-list">
-          <li>Esse personagem tem:{{ hero.comics.available }} quadrinhos.</li>
-          <li>Aparece em:{{ hero.stories.available }} histórias.</li>
-          <li>Aparece em:{{ hero.events.available }} eventos.</li>
-          <li>Aparece em:{{ hero.series.available }} séries.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
+    </section>
+    <HeroComics :id="id" />
+    <HeroEvents :id="id" />
+    <HeroSeries :id="id" />
+    <HeroStories :id="id" />
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 import { apiKeyPublic, ts, hash, baseUrl } from "@/utils";
+import HeroComics from "@/components/HeroComics.vue";
+import HeroEvents from "@/components/HeroEvents.vue";
+import HeroSeries from "@/components/HeroSeries.vue";
+import HeroStories from "@/components/HeroStories.vue";
+
 export default {
   name: "HeroPage",
   props: ["id"],
+  components: {
+    HeroComics,
+    HeroEvents,
+    HeroSeries,
+    HeroStories,
+  },
   data() {
     return {
       hero: null,
