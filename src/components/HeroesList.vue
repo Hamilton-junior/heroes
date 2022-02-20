@@ -4,7 +4,7 @@
       <div class="hero" v-for="hero in allHeroes" :key="hero.id">
         <router-link :to="{ name: 'hero', params: { id: hero.id } }">
           <img
-            :src="`${hero.thumbnail.path}.${hero.thumbnail.extension}`"
+            :src="`${hero.thumbnail.path}/standard_fantastic.${hero.thumbnail.extension}`"
             :alt="hero.name"
           />
           <span>{{ hero.name }}</span>
@@ -22,7 +22,14 @@ export default {
   name: "HeroesList",
   data() {
     return {
-      allHeroes: null,
+      allHeroes: [],
+      currentPage: 1,
+      limit: 20,
+      offset: 0,
+      total: null,
+      count: null,
+      results: [],
+      infinite: true,
     };
   },
   computed: {
@@ -36,24 +43,63 @@ export default {
   },
   methods: {
     getHero() {
-      this.allHeroes = null;
-      console.log(this.url);
+      this.allHeroes = [];
       axios
         .get(
-          `${baseUrl}${this.url}&ts=${ts}&apikey=${apiKeyPublic}&hash=${hash}`
+          `${baseUrl}${this.url}&ts=${ts}&apikey=${apiKeyPublic}&hash=${hash}`,
+          {
+            params: {
+              limit: this.limit,
+              offset: this.offset,
+            },
+          }
         )
         .then((response) => {
-          this.allHeroes = response.data.data.results;
+          this.setData(response.data.data);
         });
+    },
+    setData(data) {
+      this.total = data.total;
+      this.count = data.count;
+      this.results.push(data.results);
+    },
+    infiniteScroll() {
+      if (this.infinite) {
+        const scroll = window.scrollY;
+        const height = document.body.offsetHeight - window.innerHeight;
+        if (scroll > height * 0.9) {
+          this.currentPage += 1;
+          this.offset = this.limit * this.currentPage;
+          this.getHero();
+        }
+      }
     },
   },
   watch: {
     url() {
+      this.results = [];
+      this.offset = 0;
       this.getHero();
+    },
+    results() {
+      this.allHeroes = [];
+      for (let i = 0; i < this.results.length; i++) {
+        this.results[i].map((item) => {
+          this.allHeroes.push(item);
+        });
+      }
+    },
+    count() {
+      if (this.count < 20) {
+        this.infinite = false;
+      } else {
+        this.infinite = true;
+      }
     },
   },
   created() {
     this.getHero();
+    window.addEventListener("scroll", this.infiniteScroll);
   },
 };
 </script>
@@ -65,7 +111,7 @@ export default {
 }
 .heroes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   margin: 30px;
 }
