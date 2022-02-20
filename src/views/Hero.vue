@@ -56,6 +56,7 @@ export default {
         )
         .then((response) => {
           this.hero = response.data.data.results[0];
+          document.title = `Herói | ${this.hero.name}`;
         });
     },
   },
