@@ -1,5 +1,6 @@
 <template>
   <section>
+    <h1>Heróis da Marvel</h1>
     <HeroSearch />
     <HeroOrder />
     <HeroesList />
@@ -21,4 +22,17 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+h1 {
+  max-width: 1000px;
+  margin: 60px auto;
+  text-align: center;
+  font-size: 3rem;
+}
+@media (max-width: 800px) {
+  h1 {
+    font-size: 2rem;
+    margin: 30px 0;
+  }
+}
+</style>
