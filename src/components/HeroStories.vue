@@ -7,7 +7,7 @@ import axios from "axios";
 import { apiKeyPublic, ts, hash, baseUrl } from "@/utils";
 
 export default {
-  name: "HeroComics",
+  name: "HeroStories",
   props: ["id"],
   data() {
     return {
