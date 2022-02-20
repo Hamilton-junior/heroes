@@ -29,9 +29,6 @@
       </div>
     </section>
     <HeroComics :id="id" />
-    <HeroEvents :id="id" />
-    <HeroSeries :id="id" />
-    <HeroStories :id="id" />
   </div>
 </template>
 
@@ -39,18 +36,12 @@
 import axios from "axios";
 import { apiKeyPublic, ts, hash, baseUrl } from "@/utils";
 import HeroComics from "@/components/HeroComics.vue";
-import HeroEvents from "@/components/HeroEvents.vue";
-import HeroSeries from "@/components/HeroSeries.vue";
-import HeroStories from "@/components/HeroStories.vue";
 
 export default {
   name: "HeroPage",
   props: ["id"],
   components: {
     HeroComics,
-    HeroEvents,
-    HeroSeries,
-    HeroStories,
   },
   data() {
     return {
