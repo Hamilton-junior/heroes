@@ -1,16 +1,19 @@
 <template>
   <section class="heroes-container">
-    <div v-if="allHeroes && allHeroes.length" class="heroes">
-      <div class="hero" v-for="hero in allHeroes" :key="hero.id">
-        <router-link :to="{ name: 'hero', params: { id: hero.id } }">
-          <img
-            :src="`${hero.thumbnail.path}/standard_fantastic.${hero.thumbnail.extension}`"
-            :alt="hero.name"
-          />
-          <span>{{ hero.name }}</span>
-        </router-link>
+    <transition mode="out-in">
+      <div v-if="allHeroes && allHeroes.length" class="heroes">
+        <div class="hero" v-for="hero in allHeroes" :key="hero.id">
+          <router-link :to="{ name: 'hero', params: { id: hero.id } }">
+            <img
+              :src="`${hero.thumbnail.path}/standard_fantastic.${hero.thumbnail.extension}`"
+              :alt="hero.name"
+            />
+            <span>{{ hero.name }}</span>
+          </router-link>
+        </div>
       </div>
-    </div>
+      <PageLoading v-else />
+    </transition>
   </section>
 </template>
 
