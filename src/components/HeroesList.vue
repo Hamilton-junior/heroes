@@ -25,13 +25,31 @@ export default {
       allHeroes: null,
     };
   },
+  computed: {
+    url() {
+      let queryString = "";
+      for (let key in this.$route.query) {
+        queryString += `${key}=${this.$route.query[key]}`;
+      }
+      return `?${queryString}`;
+    },
+  },
   methods: {
     getHero() {
+      this.allHeroes = null;
+      console.log(this.url);
       axios
-        .get(`${baseUrl}?limit=21&ts=${ts}&apikey=${apiKeyPublic}&hash=${hash}`)
+        .get(
+          `${baseUrl}${this.url}&ts=${ts}&apikey=${apiKeyPublic}&hash=${hash}`
+        )
         .then((response) => {
           this.allHeroes = response.data.data.results;
         });
+    },
+  },
+  watch: {
+    url() {
+      this.getHero();
     },
   },
   created() {
